@@ -13,6 +13,8 @@ public class WorldGenManager : MonoBehaviour
     public GameObject[] roomPrefabs;
 
     private GameObject lastGeneratedRoom;
+    //[HideInInspector]
+    private List<GameObject> generatedRooms = new List<GameObject>();
     
     public string RandomSocket(){
         int rs = Random.Range(0,2);
@@ -27,19 +29,40 @@ public class WorldGenManager : MonoBehaviour
     }
 
     void Start(){
-        lastGeneratedRoom = Instantiate(roomPrefabs[0],originlPoint.transform.position,originlPoint.transform.rotation,originlPoint.transform);
-        StartCoroutine(GenerateRooms(7,2f));
+        StartGeneration(5,1f);
     }
 
-    IEnumerator GenerateRooms(int rooms, float duration){
+    public void StartGeneration(int rooms, float interval){
+        lastGeneratedRoom = Instantiate(roomPrefabs[0],originlPoint.transform.position,originlPoint.transform.rotation,originlPoint.transform);
+        generatedRooms.Add(lastGeneratedRoom);
+        StartCoroutine(GenerateRooms(rooms,interval));
+    }
 
+    IEnumerator GenerateRooms(int rooms, float interval){
+        yield return new WaitForSeconds(0.5f);
         for (int i = 0; i < rooms; i++)
         {
             Transform childTransform = lastGeneratedRoom.transform.Find(RandomSocket());
             lastGeneratedRoom = Instantiate(roomPrefabs[0],childTransform.position,childTransform.rotation,boardMap.transform);
-            yield return new WaitForSeconds(duration);
+            generatedRooms.Add(lastGeneratedRoom);
+            yield return new WaitForSeconds(interval);
         }
 
+    }
+
+    [UnityEditor.MenuItem("DebugTools/WorldGen/GenerateRooms")]
+    public static void GenerateRooms(){
+       WorldGenManager.Instance.StartGeneration(Random.Range(1,10),1f);
+    }
+
+    [UnityEditor.MenuItem("DebugTools/WorldGen/ResetBoard")]
+    public static void ResetBoard(){
+        for (int i = 0; i < WorldGenManager.Instance.generatedRooms.Count ; i++)
+        {
+            Destroy(WorldGenManager.Instance.generatedRooms[i]);
+        }
+        WorldGenManager.Instance.generatedRooms = new List<GameObject>();
+        WorldGenManager.Instance.lastGeneratedRoom = null;
     }
 
 
