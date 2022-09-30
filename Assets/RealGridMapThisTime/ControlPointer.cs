@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ControlPointer : MonoBehaviour
 {
-    public Vector3 position = new Vector3(0,0,0);
     public float units = 1;
+    public Position position = new Position(0,0);
     public CoolDown movementCoolDown = new CoolDown(1f);
     
     [System.Serializable]
@@ -32,23 +32,69 @@ public class ControlPointer : MonoBehaviour
         }
     }
 
-    public void MoveInGrid(string dir, Vector3 vect){
-        
+    public void MoveInGrid(int dir, Vector3 vector){
+        if(movementCoolDown.IsOnCoolDown == false){
+            if(getFowardPositin(dir)){
+                movementCoolDown.IsOnCoolDown = true;
+                transform.position += vector;
+                UpdatePositin(dir);
+                StartCoroutine(movementCoolDown.CoolIt());
+            }
+        }
 
+    }
+    bool getFowardPositin(int dir){
+        switch (dir){
+            case 2:
+                var x = BoardManager.Instance.midOneGrid.matrix.Count;
+                if(position.posX+1 >= x)
+                    return false;
+            break;
+            case 0:
+                var y = BoardManager.Instance.midOneGrid.matrix[0].Count;
+                if(position.posY+1 >= y)
+                    return false;
+            break;
+            case 1:
+                if(position.posY-1 < 0)
+                    return false;
+            break;  
+            case 3:
+                if(position.posX-1 < 0)
+                    return false;
+            break;
+        }
+        return true;
+    }
+    void UpdatePositin(int dir){
+        switch (dir){
+            case 0:
+                position.posY +=1;
+            break;
+            case 1:
+                position.posY -=1;
+            break;
+            case 2:
+                position.posX +=1;
+            break;
+            case 3:
+                position.posX -=1;
+            break;                    
+        }    
     }
 
     void Update()
-    {
+    {   
         if(Input.GetKey(KeyCode.D))
-            Move(new Vector3(units,0,0));
+            MoveInGrid(2,new Vector3(units,0,0));
         if(Input.GetKey(KeyCode.A))
-            Move(new Vector3(units*-1,0,0));
+            MoveInGrid(3,new Vector3(units*-1,0,0));
         if(Input.GetKey(KeyCode.W))
-            Move(new Vector3(0,units,0));
+            MoveInGrid(0,new Vector3(0,units,0));
         if(Input.GetKey(KeyCode.S))
-            Move(new Vector3(0,units*-1,0));
+            MoveInGrid(1,new Vector3(0,units*-1,0));
         if(Input.GetKeyDown(KeyCode.Space)){
-            BoardManager.Instance.SpawnAt();
+            BoardManager.Instance.SpawnAt(position);
         }
     }
 }

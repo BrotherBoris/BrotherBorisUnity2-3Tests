@@ -402,10 +402,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9915affa0ba1847933a8a4690cc614, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0, z: 0}
   units: 1.1
+  position:
+    posX: 0
+    posY: 0
   movementCoolDown:
-    coolDownTime: 0.5
+    coolDownTime: 0.3
 --- !u!212 &705342105
 SpriteRenderer:
   m_ObjectHideFlags: 0

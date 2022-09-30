@@ -70,6 +70,7 @@ public class ListMatrix{
     }
 }
 
+[System.Serializable]
 public class Position{
     public int posX;
     public int posY;

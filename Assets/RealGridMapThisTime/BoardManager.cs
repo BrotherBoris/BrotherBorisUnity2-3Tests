@@ -29,8 +29,8 @@ public class BoardManager : MonoBehaviour{
     }
 
 
-    public void SpawnAt(){
-        midOneGrid.matrix[0][0].gameObject = Instantiate(roomPrefabs[1],boardMap.transform);    
+    public void SpawnAt(Position selecPos){
+        midOneGrid.matrix[selecPos.posX][selecPos.posY].gameObject = Instantiate(roomPrefabs[1],baseGrid.matrix[selecPos.posX][selecPos.posY].vector3+boardMap.transform.localPosition,Quaternion.identity ,boardMap.transform);    
     }
 
     ////boardWithNormalList////////boardWithNormalList////
