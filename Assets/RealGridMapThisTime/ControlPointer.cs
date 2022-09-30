@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerComponent : MonoBehaviour
+public class ControlPointer : MonoBehaviour
 {
+    public Vector3 position = new Vector3(0,0,0);
     public float units = 1;
     public CoolDown movementCoolDown = new CoolDown(1f);
     
@@ -31,18 +32,23 @@ public class PlayerComponent : MonoBehaviour
         }
     }
 
-    void Update(){
-        if(Input.GetKey(KeyCode.D)){
+    public void MoveInGrid(string dir, Vector3 vect){
+        
+
+    }
+
+    void Update()
+    {
+        if(Input.GetKey(KeyCode.D))
             Move(new Vector3(units,0,0));
-        }
-        if(Input.GetKey(KeyCode.A)){
+        if(Input.GetKey(KeyCode.A))
             Move(new Vector3(units*-1,0,0));
+        if(Input.GetKey(KeyCode.W))
+            Move(new Vector3(0,units,0));
+        if(Input.GetKey(KeyCode.S))
+            Move(new Vector3(0,units*-1,0));
+        if(Input.GetKeyDown(KeyCode.Space)){
+            BoardManager.Instance.SpawnAt();
         }
-        if(Input.GetKey(KeyCode.W)){
-            Move(new Vector3(0,0,units));
-        }
-        if(Input.GetKey(KeyCode.S)){
-            Move(new Vector3(0,0,units*-1));
-        }        
     }
 }
