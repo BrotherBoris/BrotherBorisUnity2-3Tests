@@ -48,12 +48,18 @@ public class ListMatrix{
             {
                 if (x == 0 && y == 0)
                     matrix[x][y].gameObject = BoardManager.Instantiate(prefab ,(parent.localPosition + matrix[x][y].vector3), Quaternion.identity, parent);
-                else if(x == 0)
+                else if(x == 0){
                     matrix[x][y].gameObject = BoardManager.Instantiate(prefab ,(parent.localPosition + matrix[x][y].vector3)+new Vector3(0,offSet*y,0), Quaternion.identity, parent);
-                else if(y == 0)
-                     matrix[x][y].gameObject = BoardManager.Instantiate(prefab ,(parent.localPosition + matrix[x][y].vector3)+new Vector3(offSet*x,0,0), Quaternion.identity, parent);
-                else
+                    matrix[x][y].vector3 = (matrix[x][y].vector3)+new Vector3(0,offSet*y,0);
+                }
+                else if(y == 0){
+                    matrix[x][y].gameObject = BoardManager.Instantiate(prefab ,(parent.localPosition + matrix[x][y].vector3)+new Vector3(offSet*x,0,0), Quaternion.identity, parent);
+                    matrix[x][y].vector3 = (matrix[x][y].vector3)+new Vector3(offSet*x,0,0);
+                }
+                else{
                     matrix[x][y].gameObject = BoardManager.Instantiate(prefab ,(parent.localPosition + matrix[x][y].vector3)+new Vector3(offSet*x,offSet*y,0), Quaternion.identity, parent);
+                    matrix[x][y].vector3 = (matrix[x][y].vector3)+new Vector3(offSet*x,offSet*y,0);
+                }
             }
         }
     }
