@@ -17,10 +17,11 @@ public class GridManager : MonoBehaviour{
     public GameObject gridObj;
     public GameObject boardMap;
 
-    public GridSystem3D grid = new GridSystem3D(10,10,true);
+    public GridSystem3D baseGrid = new GridSystem3D(10,10,true);
+    public GridSystem3D EnemyGgrid = new GridSystem3D(10,10,true);
     
     private void Start() {
-        grid.fillTiles(gridObj, boardMap.transform);    
+        baseGrid.fillTiles(gridObj, boardMap.transform);    
     }
 }
 
@@ -60,9 +61,11 @@ namespace Local3DGame{
         }
         public void fillTiles(GameObject prefab, Transform parent){
             for (int x = 0; x < matrix.Count; x++){
-                for (int z = 0; z < matrix[x].Count; z++)
-                {
-                    matrix[x][z].gameObject = BoardManager.Instantiate(prefab ,(parent.localPosition + matrix[x][z].vector3), Quaternion.identity, parent);
+                for (int z = 0; z < matrix[x].Count; z++){
+                    matrix[x][z].gameObject = GridManager.Instantiate(prefab ,(parent.localPosition + matrix[x][z].vector3), prefab.transform.rotation, parent);
+                    matrix[x][z].gameObject.name = "gridobjx"+x+"z"+z;
+                    matrix[x][z].gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                    matrix[x][z].gameObject.GetComponent<GridObject>().position = new Position(x,z);
                 }
             }
         }
@@ -105,6 +108,7 @@ namespace Local3DGame{
         public GameObject gameObject;
         public Vector3 vector3;
         public Position position;
+        public bool isValid;
 
         public GridEntity(){
 
@@ -113,6 +117,7 @@ namespace Local3DGame{
         public GridEntity(Vector3 v3, Position position){
             this.vector3= v3;
             this.position = position;
+            this.isValid = true;
         }
     }
 }
